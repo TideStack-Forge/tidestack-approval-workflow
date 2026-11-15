@@ -1,0 +1,48 @@
+{
+  "formatVersion": 2,
+  "id": "flowmultiplesequential",
+  "name": "串行会签共享场景",
+  "category": "",
+  "icon": "shenpi",
+  "description": "",
+  "formType": "default",
+  "formKey": "runtime-form",
+  "nodes": [
+    {
+      "type": "发起节点",
+      "name": "发起节点",
+      "id": "startnode",
+      "permission": []
+    },
+    {
+      "type": "审批节点",
+      "name": "会签审批",
+      "id": "multiapproval",
+      "subType": "会签",
+      "candidates": [],
+      "permission": [],
+      "multipleMode": "串行",
+      "percentage": 100,
+      "rejectAction": "reject"
+    },
+    {
+      "type": "结束节点",
+      "name": "结束",
+      "id": "endnode"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "type": "SEQUENCE",
+      "sourceId": "startnode",
+      "targetId": "multiapproval"
+    },
+    {
+      "id": "e2",
+      "type": "SEQUENCE",
+      "sourceId": "multiapproval",
+      "targetId": "endnode"
+    }
+  ]
+}

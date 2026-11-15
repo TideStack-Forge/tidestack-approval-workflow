@@ -1,0 +1,103 @@
+{
+  "formatVersion": 2,
+  "id": "flow-smoke-subflow-no-task-parent",
+  "name": "子流程无任务共享场景",
+  "category": "",
+  "icon": "shenpi",
+  "description": "",
+  "formType": "default",
+  "formKey": "runtime-form",
+  "nodes": [
+    {
+      "type": "发起节点",
+      "name": "发起节点",
+      "id": "startnode",
+      "permission": []
+    },
+    {
+      "type": "审批节点",
+      "name": "一级审批",
+      "id": "approve-a",
+      "subType": "单签",
+      "candidates": [],
+      "permission": [],
+      "actions": [
+        "reject",
+        "rollback"
+      ]
+    },
+    {
+      "type": "审批节点",
+      "name": "会签审批",
+      "id": "multi-a",
+      "subType": "会签",
+      "candidates": [],
+      "permission": [],
+      "multipleMode": "并行",
+      "percentage": 100,
+      "rejectAction": "reject"
+    },
+    {
+      "type": "子流程节点",
+      "name": "子流程调用",
+      "id": "subflow-a",
+      "subFlowKey": "child-no-task-flow",
+      "rejectAction": "reject",
+      "inParameters": [],
+      "outParameters": []
+    },
+    {
+      "type": "结束节点",
+      "name": "结束",
+      "id": "end-a"
+    },
+    {
+      "type": "JoinNode",
+      "name": "并行汇聚",
+      "id": "join-a",
+      "joinType": "OR"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "type": "SEQUENCE",
+      "sourceId": "startnode",
+      "targetId": "approve-a",
+      "name": "一级审批分支",
+      "order": 1
+    },
+    {
+      "id": "e2",
+      "type": "SEQUENCE",
+      "sourceId": "startnode",
+      "targetId": "multi-a",
+      "name": "会签分支",
+      "order": 2
+    },
+    {
+      "id": "e3",
+      "type": "SEQUENCE",
+      "sourceId": "approve-a",
+      "targetId": "join-a"
+    },
+    {
+      "id": "e4",
+      "type": "SEQUENCE",
+      "sourceId": "multi-a",
+      "targetId": "join-a"
+    },
+    {
+      "id": "e5",
+      "type": "SEQUENCE",
+      "sourceId": "join-a",
+      "targetId": "subflow-a"
+    },
+    {
+      "id": "e6",
+      "type": "SEQUENCE",
+      "sourceId": "subflow-a",
+      "targetId": "end-a"
+    }
+  ]
+}

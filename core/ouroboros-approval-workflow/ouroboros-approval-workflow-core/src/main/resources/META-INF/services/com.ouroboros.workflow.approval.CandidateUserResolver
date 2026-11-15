@@ -1,0 +1,3 @@
+com.ouroboros.workflow.approval.candidate.StarterCandidateResolver
+com.ouroboros.workflow.approval.candidate.UserCandidateResolver
+com.ouroboros.workflow.approval.candidate.UserSelectCandidateResolver

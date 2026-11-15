@@ -1,0 +1,49 @@
+{
+  "formatVersion": 2,
+  "id": "flow-smoke-handle",
+  "name": "办理节点共享场景",
+  "category": "",
+  "icon": "shenpi",
+  "description": "",
+  "formType": "default",
+  "formKey": "runtime-form",
+  "nodes": [
+    {
+      "type": "发起节点",
+      "name": "发起节点",
+      "id": "startnode",
+      "permission": []
+    },
+    {
+      "type": "HandleNode",
+      "name": "资料办理",
+      "id": "handle-a",
+      "candidates": [
+        {
+          "type": "UserSelect",
+          "mode": "single"
+        }
+      ],
+      "permission": []
+    },
+    {
+      "type": "结束节点",
+      "name": "结束",
+      "id": "end-a"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "type": "SEQUENCE",
+      "sourceId": "startnode",
+      "targetId": "handle-a"
+    },
+    {
+      "id": "e2",
+      "type": "SEQUENCE",
+      "sourceId": "handle-a",
+      "targetId": "end-a"
+    }
+  ]
+}

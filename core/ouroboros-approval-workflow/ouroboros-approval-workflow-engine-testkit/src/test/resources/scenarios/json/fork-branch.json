@@ -1,0 +1,68 @@
+{
+  "formatVersion": 2,
+  "id": "flow-a",
+  "name": "采购审批",
+  "category": "",
+  "icon": "shenpi",
+  "description": "",
+  "formType": "default",
+  "formKey": "purchase-form",
+  "nodes": [
+    { "type": "发起节点", "name": "发起节点", "id": "start-a", "permission": [] },
+    {
+      "type": "审批节点",
+      "name": "经理审批",
+      "id": "approve-a",
+      "subType": "单签",
+      "candidates": [{ "type": "UserSelect", "mode": "single" }],
+      "permission": [],
+      "actions": ["reject"]
+    },
+    {
+      "type": "审批节点",
+      "name": "直属审批",
+      "id": "approve-b",
+      "subType": "单签",
+      "candidates": [{ "type": "UserSelect", "mode": "single" }],
+      "permission": [],
+      "actions": ["reject"]
+    },
+    {
+      "type": "审批节点",
+      "name": "财务审批",
+      "id": "approve-c",
+      "subType": "单签",
+      "candidates": [{ "type": "UserSelect", "mode": "single" }],
+      "permission": [],
+      "actions": ["reject"]
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "type": "SEQUENCE",
+      "sourceId": "start-a",
+      "targetId": "approve-a",
+      "condition": {
+        "left": { "type": "field", "field": "amount" },
+        "op": "greater",
+        "right": 1000
+      },
+      "order": 1
+    },
+    {
+      "id": "e2",
+      "type": "SEQUENCE",
+      "sourceId": "start-a",
+      "targetId": "approve-b",
+      "condition": {
+        "left": { "type": "field", "field": "amount" },
+        "op": "less_or_equal",
+        "right": 1000
+      },
+      "order": 2
+    },
+    { "id": "e3", "type": "SEQUENCE", "sourceId": "approve-a", "targetId": "approve-c" },
+    { "id": "e4", "type": "SEQUENCE", "sourceId": "approve-b", "targetId": "approve-c" }
+  ]
+}

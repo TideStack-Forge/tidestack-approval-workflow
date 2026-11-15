@@ -1,0 +1,2 @@
+com.ouroboros.data.TypedDataModelAutoConfiguration
+com.ouroboros.data.typed.runtime.TypedRuntimeModelScanConfiguration

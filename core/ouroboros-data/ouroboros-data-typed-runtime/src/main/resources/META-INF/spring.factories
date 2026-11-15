@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.ouroboros.data.TypedDataModelAutoConfiguration,\
+com.ouroboros.data.typed.runtime.TypedRuntimeModelScanConfiguration

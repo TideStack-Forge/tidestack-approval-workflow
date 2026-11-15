@@ -1,0 +1,54 @@
+{
+  "formatVersion": 2,
+  "id": "flowhyphensinglee2e",
+  "name": "单签连字符节点共享场景",
+  "category": "",
+  "icon": "shenpi",
+  "description": "",
+  "formType": "default",
+  "formKey": "runtime-form",
+  "nodes": [
+    {
+      "type": "发起节点",
+      "name": "发起节点",
+      "id": "startnode",
+      "permission": []
+    },
+    {
+      "type": "审批节点",
+      "name": "经理审批",
+      "id": "approve-a",
+      "subType": "单签",
+      "candidates": [
+        {
+          "type": "Starter",
+          "isChecked": true
+        }
+      ],
+      "permission": [],
+      "actions": [
+        "reject",
+        "rollback"
+      ]
+    },
+    {
+      "type": "结束节点",
+      "name": "结束",
+      "id": "end-a"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "type": "SEQUENCE",
+      "sourceId": "startnode",
+      "targetId": "approve-a"
+    },
+    {
+      "id": "e2",
+      "type": "SEQUENCE",
+      "sourceId": "approve-a",
+      "targetId": "end-a"
+    }
+  ]
+}

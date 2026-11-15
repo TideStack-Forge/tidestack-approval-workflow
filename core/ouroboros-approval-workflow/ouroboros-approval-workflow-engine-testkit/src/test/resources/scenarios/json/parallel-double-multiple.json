@@ -1,0 +1,85 @@
+{
+  "formatVersion": 2,
+  "id": "flow-parallel-double-multiple",
+  "name": "双并行会签共享场景",
+  "category": "",
+  "icon": "shenpi",
+  "description": "",
+  "formType": "default",
+  "formKey": "runtime-form",
+  "nodes": [
+    {
+      "type": "发起节点",
+      "name": "发起节点",
+      "id": "startnode",
+      "permission": []
+    },
+    {
+      "type": "审批节点",
+      "name": "会签审批A",
+      "id": "multi-a",
+      "subType": "会签",
+      "candidates": [],
+      "permission": [],
+      "multipleMode": "并行",
+      "percentage": 50,
+      "rejectAction": "reject"
+    },
+    {
+      "type": "审批节点",
+      "name": "会签审批B",
+      "id": "multi-b",
+      "subType": "会签",
+      "candidates": [],
+      "permission": [],
+      "multipleMode": "并行",
+      "percentage": 50,
+      "rejectAction": "reject"
+    },
+    {
+      "type": "结束节点",
+      "name": "结束",
+      "id": "end-a"
+    },
+    {
+      "type": "JoinNode",
+      "name": "并行汇聚",
+      "id": "join-a",
+      "joinType": "OR"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "type": "SEQUENCE",
+      "sourceId": "startnode",
+      "targetId": "multi-a",
+      "order": 1
+    },
+    {
+      "id": "e2",
+      "type": "SEQUENCE",
+      "sourceId": "startnode",
+      "targetId": "multi-b",
+      "order": 2
+    },
+    {
+      "id": "e3",
+      "type": "SEQUENCE",
+      "sourceId": "multi-a",
+      "targetId": "join-a"
+    },
+    {
+      "id": "e4",
+      "type": "SEQUENCE",
+      "sourceId": "multi-b",
+      "targetId": "join-a"
+    },
+    {
+      "id": "e5",
+      "type": "SEQUENCE",
+      "sourceId": "join-a",
+      "targetId": "end-a"
+    }
+  ]
+}

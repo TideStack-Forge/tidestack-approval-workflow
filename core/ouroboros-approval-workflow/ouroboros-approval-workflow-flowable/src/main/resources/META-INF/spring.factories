@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  org.flowable.spring.boot.ProcessEngineAutoConfiguration,\
+  org.flowable.spring.boot.ProcessEngineServicesAutoConfiguration,\
+  com.ouroboros.workflow.approval.flowable.ApprovalWorkflowEngineSelectionVerifier,\
+  com.ouroboros.workflow.approval.flowable.ApprovalWorkflowFlowableAutoConfiguration
