@@ -41,6 +41,24 @@ class SpringContextUtilTest {
     assertThrows(IllegalStateException.class, () -> SpringContextUtil.getBean(String.class));
   }
 
+  @Test
+  void closingTheOwnerDoesNotPromoteAnotherContextOrLetItsLaterCloseClearANewOwner() {
+    var first = context("first");
+    try (var other = context("other")) {
+      first.close();
+      assertNull(SpringContextUtil.getApplicationContext());
+      assertThrows(IllegalStateException.class, () -> SpringContextUtil.getBean(String.class));
+      try (var replacement = context("replacement")) {
+        other.close();
+        assertSame(replacement, SpringContextUtil.getApplicationContext());
+        assertEquals("replacement", SpringContextUtil.getBean(String.class));
+      }
+    } finally {
+      first.close();
+    }
+    assertNull(SpringContextUtil.getApplicationContext());
+  }
+
   private GenericApplicationContext context(String value) {
     var context = new GenericApplicationContext();
     context.registerBean(SpringContextUtil.class);

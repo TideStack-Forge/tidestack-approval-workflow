@@ -25,6 +25,8 @@ import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.core.ResolvableType;
 
+import com.ouroboros.workflow.approval.lifecycle.ApprovalCaseService;
+
 /**
  * {@link FlowableDatabaseCatalogConfigurer} 的行为：只有 MySQL 系数据库、且使用方没有显式指定 catalog 时，
  * 才把 catalog 限定为当前库；任何取不到 catalog 的异常路径都必须安静降级，不能影响启动。
@@ -104,6 +106,7 @@ class FlowableDatabaseCatalogConfigurerTest {
     DataSource dataSource = dataSourceUnchecked("MySQL", "app_db");
 
     new ApplicationContextRunner()
+        .withBean(ApprovalCaseService.class, () -> mock(ApprovalCaseService.class))
         .withConfiguration(AutoConfigurations.of(ApprovalWorkflowFlowableAutoConfiguration.class))
         .withBean("dataSource", DataSource.class, () -> dataSource)
         .withBean(TaskService.class, () -> mock(TaskService.class))

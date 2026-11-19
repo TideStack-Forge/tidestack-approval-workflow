@@ -1,6 +1,7 @@
 package com.ouroboros.common.app.util;
 
 import java.util.concurrent.atomic.AtomicReference;
+import com.ouroboros.util.SPI;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
@@ -22,7 +23,16 @@ public class SpringContextUtil implements ApplicationContextAware, DisposableBea
 
     @Override
     public void destroy() {
-        applicationContext.compareAndSet(owner, null);
+        ApplicationContext released = owner;
+        owner = null;
+        if (released == null) {
+            return;
+        }
+        applicationContext.compareAndSet(released, null);
+        ApplicationContext selected = applicationContext.get();
+        if (selected == null || selected.getClassLoader() != released.getClassLoader()) {
+            SPI.clearCache(released.getClassLoader());
+        }
     }
 
     public static ApplicationContext getApplicationContext() {

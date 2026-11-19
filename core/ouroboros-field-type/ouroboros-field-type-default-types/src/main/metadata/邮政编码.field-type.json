@@ -1,0 +1,28 @@
+{
+  "name": "邮政编码",
+  "label": "邮政编码",
+  "order": 150,
+  "dataType": {
+    "type": "String",
+    "size": "${size}"
+  },
+  "ui": {
+    "input": {
+      "type": "input-text"
+    },
+    "display": {
+      "type": "static-text"
+    }
+  },
+  "validations": {
+    "isZipcode": true
+  },
+  "paramsUiSchema": [
+    {
+      "type": "input-number",
+      "name": "size",
+      "label": "长度",
+      "value": 6
+    }
+  ]
+}

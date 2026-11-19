@@ -11,6 +11,7 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <aws-sdk.version>2.57.3</aws-sdk.version>
         <spring-boot.version>3.5.11</spring-boot.version>
         <spring-cloud.version>2025.0.3</spring-cloud.version>
         <spring-ai.version>2.0.0</spring-ai.version>
@@ -29,6 +30,38 @@
     </properties>
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>software.amazon.awssdk</groupId>
+                <artifactId>bom</artifactId>
+                <version>${aws-sdk.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-storage</artifactId>
+                <version>${ouroboros.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-storage-core</artifactId>
+                <version>${ouroboros.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-storage-runtime</artifactId>
+                <version>${ouroboros.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-storage-filesystem</artifactId>
+                <version>${ouroboros.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-storage-s3</artifactId>
+                <version>${ouroboros.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.nimbusds</groupId>
                 <artifactId>nimbus-jose-jwt</artifactId>
@@ -301,6 +334,11 @@
             </dependency>
             <dependency>
                 <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-dev-editor-service</artifactId>
+                <version>${ouroboros.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
                 <artifactId>ouroboros-dev-code-intelligence</artifactId>
                 <version>${ouroboros.version}</version>
             </dependency>
@@ -447,6 +485,11 @@
             <dependency>
                 <groupId>com.ouroboros</groupId>
                 <artifactId>ouroboros-business-model-core</artifactId>
+                <version>${ouroboros.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-business-model-security-core</artifactId>
                 <version>${ouroboros.version}</version>
             </dependency>
             <dependency>
@@ -786,6 +829,11 @@
             </dependency>
             <dependency>
                 <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-dynamic-form-core</artifactId>
+                <version>${ouroboros.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
                 <artifactId>dynamic-form-runtime</artifactId>
                 <version>${ouroboros.version}</version>
             </dependency>
@@ -896,12 +944,12 @@
             </dependency>
             <dependency>
                 <groupId>com.ouroboros</groupId>
-                <artifactId>ouroboros-file-upload-fields</artifactId>
+                <artifactId>ouroboros-file-upload-storage</artifactId>
                 <version>${ouroboros.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.ouroboros</groupId>
-                <artifactId>ouroboros-file-upload-filesystem</artifactId>
+                <artifactId>ouroboros-file-upload-fields</artifactId>
                 <version>${ouroboros.version}</version>
             </dependency>
             <dependency>

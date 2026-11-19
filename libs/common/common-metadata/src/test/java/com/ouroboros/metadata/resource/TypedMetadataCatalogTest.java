@@ -135,6 +135,19 @@ class TypedMetadataCatalogTest {
     assertTrue(exception.getMessage().contains("broken.demo.json"));
   }
 
+  @Test
+  void strictParserRetainsFieldDiagnosisAlongsideResourceLocation() {
+    var catalog = new TypedMetadataCatalog(new FixedMetadataSource(List.of(new MetadataResource("purchase.demo.json", "{}"))));
+    var spec = TypedMetadataSpec.<DemoMetadata>builder(DemoMetadata.class)
+        .typedSuffix(".demo.json")
+        .parser(content -> Try.failure(new IllegalArgumentException("字段 amount 的 params 必须为对象")))
+        .keyExtractor(DemoMetadata::getName)
+        .parseFailurePolicy(TypedMetadataSpec.ParseFailurePolicy.ERROR).build();
+    var failure = assertThrows(IllegalStateException.class, () -> catalog.load(spec));
+    assertTrue(failure.getMessage().contains("purchase.demo.json"));
+    assertTrue(failure.getMessage().contains("字段 amount"));
+  }
+
   private static TypedMetadataSpec<DemoMetadata> demoSpec() {
     return TypedMetadataSpec.<DemoMetadata>builder(DemoMetadata.class)
         .typedSuffix(".demo.json")

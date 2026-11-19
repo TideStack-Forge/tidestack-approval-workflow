@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
@@ -48,6 +47,33 @@ class FlowableConditionRoutingIntegrationTest extends AbstractEngineContractTest
   @Override
   protected EngineCapability capabilities() {
     return FlowableEngineCapabilitySet.DEFAULT;
+  }
+
+  @Test
+  void customFormRedeploymentKeepsOldInstancesOnTheirOriginalConditions() throws Exception {
+    ObjectNode original = (ObjectNode) new ObjectMapper().readTree(conditionalFlowJson("purchaseType", "select_equals", "equipment"));
+    original.put("formType", "custom");
+    original.put("formKey", "purchase");
+    ArrayNode originalEdges = (ArrayNode) original.get("edges");
+    for (int index = originalEdges.size() - 1; index >= 0; index--) {
+      if (List.of("e1", "e4").contains(originalEdges.get(index).path("id").asText())) originalEdges.remove(index);
+    }
+    ArrayNode originalNodes = (ArrayNode) original.get("nodes");
+    for (int index = originalNodes.size() - 1; index >= 0; index--) {
+      if ("approve-special".equals(originalNodes.get(index).path("id").asText())) originalNodes.remove(index);
+    }
+    adapter.deploy("flow-condition-routing", original.toString());
+    var oldInstance = adapter.start("flow-condition-routing", new StartRequest("starter", Collections.emptyMap(), Map.of("purchaseType", "equipment"), Collections.emptyMap()));
+    ObjectNode revised = original.deepCopy();
+    for (JsonNode edge : revised.path("edges")) {
+      if ("e2".equals(edge.path("id").asText())) ((ObjectNode) edge.path("condition")).put("right", "service");
+    }
+    adapter.deploy("flow-condition-routing", revised.toString());
+    var newInstance = adapter.start("flow-condition-routing", new StartRequest("starter", Collections.emptyMap(), Map.of("purchaseType", "equipment"), Collections.emptyMap()));
+    adapter.completeStartTask(oldInstance.getInstanceId());
+    adapter.completeStartTask(newInstance.getInstanceId());
+    assertEquals(1, adapter.activeTasks(oldInstance.getInstanceId(), "approve-normal").size());
+    assertEquals(1, adapter.activeTasks(newInstance.getInstanceId(), "approve-none").size());
   }
 
   @Test

@@ -1,8 +1,0 @@
-com.ouroboros.workflow.approval.flowable.action.FlowableApproveAction
-com.ouroboros.workflow.approval.flowable.action.FlowableRejectAction
-com.ouroboros.workflow.approval.flowable.action.FlowableRollbackAction
-com.ouroboros.workflow.approval.flowable.action.FlowableTransferAction
-com.ouroboros.workflow.approval.flowable.action.FlowableAddSignAction
-com.ouroboros.workflow.approval.flowable.action.FlowableFreeRejectAction
-com.ouroboros.workflow.approval.flowable.action.FlowableFreeRecoverAction
-com.ouroboros.workflow.approval.flowable.action.FlowableFreeApprovalAction

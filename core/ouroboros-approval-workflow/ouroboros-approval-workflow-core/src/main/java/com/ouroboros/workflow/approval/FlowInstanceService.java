@@ -19,13 +19,24 @@ import com.ouroboros.workflow.approval.model.FlowTimeline;
 
 public interface FlowInstanceService {
   /**
+   * 统一发起入口。调用方不选择引擎或接入模式；实际路由由流程映射决定。
+   * 返回平台执行引用与真实启动状态，任务处理能力独立表达。
+   */
+  default Try<FlowStartResult> start(FlowStartCommand command) {
+    Try<String> started = command.cc() == null
+        ? start(command.flowKey(), command.userId(), command.taskAssignee(), command.instanceVariables(), command.formData())
+        : start(command.flowKey(), command.userId(), command.taskAssignee(), command.instanceVariables(), command.formData(), command.cc());
+    return started.map(FlowStartResult::started);
+  }
+
+  /**
    * 开始一个流程
    *
    * @param flowKey           流程定义Key（ID）
    * @param userId            启动流程的用户ID
    * @param taskAssignee      用户自选的任务候选人
    * @param instanceVariables 自定义流程变量
-   * @return 流程实例ID
+   * @return 平台执行引用；外部异步启动时仅代表已受理，不代表存在本地任务
    */
   default Try<String> start(
       String flowKey,
@@ -41,7 +52,7 @@ public interface FlowInstanceService {
    * @param flowKey      流程定义Key（ID）
    * @param userId       启动流程的用户ID
    * @param taskAssignee 用户自选的任务候选人
-   * @return 流程实例ID
+   * @return 平台执行引用；外部异步启动时仅代表已受理，不代表存在本地任务
    */
   default Try<String> start(String flowKey, String userId, Map<String, List<String>> taskAssignee) {
     return start(flowKey, userId, taskAssignee, null, null);
@@ -55,7 +66,7 @@ public interface FlowInstanceService {
    * @param taskAssignee      用户自选的任务候选人
    * @param instanceVariables 自定义流程变量
    * @param formData          初始表单数据
-   * @return 流程实例ID
+   * @return 平台执行引用；外部异步启动时仅代表已受理，不代表存在本地任务
    */
   default Try<String> start(
       String flowKey,
@@ -81,7 +92,7 @@ public interface FlowInstanceService {
    * @param instanceVariables 自定义流程变量
    * @param formData          初始表单数据
    * @param initTaskDeferred  开启流程后初始任务提交延迟
-   * @return 流程实例ID
+   * @return 平台执行引用；外部异步启动时仅代表已受理，不代表存在本地任务
    */
   Try<String> start(
       String flowKey,
@@ -100,7 +111,7 @@ public interface FlowInstanceService {
    * @param instanceVariables 自定义流程变量
    * @param formData          初始表单数据
    * @param cc                发起时抄送配置 {@code {"userIds": List<String>, "position": "START"|"FINISH"|"START_FINISH"}}
-   * @return 流程实例ID
+   * @return 平台执行引用；外部异步启动时仅代表已受理，不代表存在本地任务
    */
   default Try<String> start(
       String flowKey,
@@ -275,6 +286,18 @@ public interface FlowInstanceService {
       String flowKey, List<String> approvalUrls) {
     return Try.failure(new PlatformException("[" + ApprovalWorkflowErrorCodes.WORKFLOW_ENGINE_NOT_FOUND
         + "] 当前流程引擎不支持按审批地址查询流程信息"));
+  }
+
+  /** 读取执行状态及可用的页面能力；执行引用不代表存在本地任务。 */
+  default Try<FlowProcessInfo> getProcessInfo(String instanceId) {
+    return Try.failure(new PlatformException("[" + ApprovalWorkflowErrorCodes.WORKFLOW_ENGINE_NOT_FOUND
+        + "] 当前流程引擎不支持读取流程信息"));
+  }
+
+  /** 带业务记录类型的列表查询；旧引擎继续沿审批地址查询。 */
+  default Try<Map<String, FlowProcessInfo>> getProcessInfoByApprovalUrls(
+      String flowKey, List<String> approvalUrls, String businessRecordType) {
+    return getProcessInfoByApprovalUrls(flowKey, approvalUrls);
   }
 
   /**

@@ -49,9 +49,11 @@ public class TypedMetadataCatalog {
       }
       lastFailure = result.getCause();
     }
+    String message = spec.metadataType().getSimpleName() + " 解析失败"
+        + (lastFailure != null && lastFailure.getMessage() != null ? ": " + lastFailure.getMessage() : "");
     var diagnostic = spec.parseFailurePolicy() == TypedMetadataSpec.ParseFailurePolicy.ERROR
-        ? MetadataDiagnostic.error(resource.resourceName(), spec.metadataType().getSimpleName() + " 解析失败", lastFailure)
-        : MetadataDiagnostic.warn(resource.resourceName(), spec.metadataType().getSimpleName() + " 解析失败", lastFailure);
+        ? MetadataDiagnostic.error(resource.resourceName(), message, lastFailure)
+        : MetadataDiagnostic.warn(resource.resourceName(), message, lastFailure);
     diagnostics.add(diagnostic);
     return java.util.Optional.empty();
   }

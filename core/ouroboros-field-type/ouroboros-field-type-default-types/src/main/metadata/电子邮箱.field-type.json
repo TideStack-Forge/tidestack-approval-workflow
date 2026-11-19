@@ -1,0 +1,28 @@
+{
+  "name": "电子邮箱",
+  "label": "电子邮箱",
+  "order": 100,
+  "dataType": {
+    "type": "String",
+    "size": "${size}"
+  },
+  "ui": {
+    "input": {
+      "type": "input-text"
+    },
+    "display": {
+      "type": "static-text"
+    }
+  },
+  "validations": {
+    "isEmail": true
+  },
+  "paramsUiSchema": [
+    {
+      "type": "input-number",
+      "name": "size",
+      "label": "长度",
+      "value": 100
+    }
+  ]
+}

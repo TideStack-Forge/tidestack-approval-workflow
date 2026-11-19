@@ -1,0 +1,28 @@
+{
+  "name": "手机号码",
+  "label": "手机号码",
+  "order": 120,
+  "dataType": {
+    "type": "String",
+    "size": "${size}"
+  },
+  "ui": {
+    "input": {
+      "type": "input-text"
+    },
+    "display": {
+      "type": "static-text"
+    }
+  },
+  "validations": {
+    "isPhoneNumber": true
+  },
+  "paramsUiSchema": [
+    {
+      "type": "input-number",
+      "name": "size",
+      "label": "长度",
+      "value": 20
+    }
+  ]
+}

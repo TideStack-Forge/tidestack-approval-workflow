@@ -1,0 +1,41 @@
+{
+  "name": "多行文本",
+  "label": "多行文本",
+  "order": 70,
+  "dataType": {
+    "type": "String",
+    "size": "${size}"
+  },
+  "ui": {
+    "input": {
+      "type": "textarea",
+      "maxLength": "${size}",
+      "minRows": "${minRows}",
+      "maxRows": "${maxRows}"
+    },
+    "display": {
+      "type": "static-text"
+    }
+  },
+  "validations": {
+    "matchRegexp": "${regexp}"
+  },
+  "paramsUiSchema": [
+    {
+      "type": "input-number",
+      "name": "size",
+      "label": "长度",
+      "value": 200
+    },
+    {
+      "type": "input-number",
+      "name": "minRows",
+      "label": "最小行数"
+    },
+    {
+      "type": "input-number",
+      "name": "maxRows",
+      "label": "最大行数"
+    }
+  ]
+}

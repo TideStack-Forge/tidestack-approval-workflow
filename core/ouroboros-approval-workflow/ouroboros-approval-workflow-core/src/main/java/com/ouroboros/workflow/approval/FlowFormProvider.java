@@ -10,6 +10,8 @@ import com.ouroboros.workflow.approval.model.FlowForm;
 public interface FlowFormProvider {
   String getType();
 
+  default String getTitle() { return getType(); }
+
   List<FlowForm> search(String keyword);
 
   Tuple2<Long, List<FlowForm>> search(String keyword, Integer page, Integer pageSize);

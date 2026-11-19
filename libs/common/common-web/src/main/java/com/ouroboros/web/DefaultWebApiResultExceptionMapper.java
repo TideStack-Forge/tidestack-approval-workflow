@@ -12,8 +12,6 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import io.vavr.Tuple;
 import io.vavr.Tuple3;
 
-import com.ouroboros.data.exception.DataValidationException;
-import com.ouroboros.data.exception.RecordValidationException;
 import com.ouroboros.exception.BusinessException;
 import com.ouroboros.exception.ValidationException;
 
@@ -28,14 +26,6 @@ public class DefaultWebApiResultExceptionMapper implements WebApiResultException
       var errors = e.getErrors();
       Object finalErrors = ObjectUtils.isEmpty(errors) ? e.getMessage() : errors;
       return Tuple.of(e.getErrorCode(), "", finalErrors);
-    }
-    if (throwable instanceof RecordValidationException e) {
-      var errors = e.getJoinedErrors(",");
-      Object finalErrors = ObjectUtils.isEmpty(errors) ? e.getMessage() : errors;
-      return Tuple.of(-1, "", finalErrors);
-    }
-    if (throwable instanceof DataValidationException e) {
-      return Tuple.of(-1, e.getMessage(), null);
     }
     if (throwable instanceof HttpRequestMethodNotSupportedException) {
       return Tuple.of(405, "请求方法不支持", null);

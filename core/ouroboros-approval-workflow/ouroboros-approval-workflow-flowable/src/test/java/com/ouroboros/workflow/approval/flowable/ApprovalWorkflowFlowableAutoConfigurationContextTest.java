@@ -43,6 +43,7 @@ import com.ouroboros.workflow.approval.flowable.service.FlowableFlowDefinitionSe
 import com.ouroboros.workflow.approval.flowable.service.FlowableFlowInstanceService;
 import com.ouroboros.workflow.approval.flowable.service.FlowableFlowManageService;
 import com.ouroboros.workflow.approval.flowable.service.FlowableFlowTaskService;
+import com.ouroboros.workflow.approval.lifecycle.ApprovalCaseService;
 
 class ApprovalWorkflowFlowableAutoConfigurationContextTest {
   private static final String BOOT3_AUTO_CONFIGURATION_IMPORTS =
@@ -149,6 +150,7 @@ class ApprovalWorkflowFlowableAutoConfigurationContextTest {
 
   private ApplicationContextRunner contextRunner() {
     return new ApplicationContextRunner()
+        .withBean(ApprovalCaseService.class, () -> mock(ApprovalCaseService.class))
         .withBean(TaskService.class, () -> mock(TaskService.class))
         .withBean(RuntimeService.class, () -> mock(RuntimeService.class))
         .withBean(RepositoryService.class, () -> mock(RepositoryService.class))

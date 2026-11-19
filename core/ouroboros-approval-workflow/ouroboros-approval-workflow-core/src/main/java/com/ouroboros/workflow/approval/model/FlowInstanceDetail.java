@@ -14,6 +14,10 @@ public class FlowInstanceDetail {
 
   String taskId;
   String taskName;
+  boolean cancellable;
+
+  public boolean isCancellable() { return cancellable; }
+  public void setCancellable(boolean cancellable) { this.cancellable = cancellable; }
 
   public String getInstanceId() {
     return instanceId;

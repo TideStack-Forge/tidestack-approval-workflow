@@ -24,7 +24,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -57,7 +56,6 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.AnnotationTransactionAttributeSource;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 import org.springframework.transaction.support.SimpleTransactionStatus;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import io.vavr.control.Try;
 
@@ -429,8 +427,9 @@ public class FlowableFlowInstanceServiceTest {
     assertEquals(LocalDateTime.of(2026, 3, 18, 9, 0), detail.getStartTime());
   }
 
-  @Test
-  void getProcessInfoByApprovalUrlsMapsActiveTasksWithWorkflowNodeType() {
+  @org.junit.jupiter.params.ParameterizedTest
+  @org.junit.jupiter.params.provider.ValueSource(booleans = {false, true})
+  void processInfoReadsKeepBuiltInTaskPermissionsAndPresentationCapabilities(boolean directRead) {
     TaskService taskService = mock(TaskService.class);
     RuntimeService runtimeService = mock(RuntimeService.class);
     RepositoryService repositoryService = mock(RepositoryService.class);
@@ -452,7 +451,11 @@ public class FlowableFlowInstanceServiceTest {
     TaskQuery activeTaskQuery = mock(TaskQuery.class);
     Task activeTask = mock(Task.class);
 
-    when(historyService.createHistoricVariableInstanceQuery()).thenReturn(approvalUrlQuery, starterQuery, outcomeQuery);
+    if (directRead) {
+      when(historyService.createHistoricVariableInstanceQuery()).thenReturn(starterQuery, outcomeQuery);
+    } else {
+      when(historyService.createHistoricVariableInstanceQuery()).thenReturn(approvalUrlQuery, starterQuery, outcomeQuery);
+    }
     when(approvalUrlQuery.variableValueEquals("approvalUrl", "/demo/customer/1/approval")).thenReturn(approvalUrlQuery);
     when(approvalUrlQuery.list()).thenReturn(Collections.singletonList(approvalUrlVariable));
     when(approvalUrlVariable.getProcessInstanceId()).thenReturn("instance-1");
@@ -498,18 +501,15 @@ public class FlowableFlowInstanceServiceTest {
     when(activeTask.getCreateTime()).thenReturn(dateOf(2026, Month.MARCH, 18, 9, 5));
     when(repositoryService.getBpmnModel("process-definition-1")).thenReturn(buildBpmnModel(v2FlowJson()));
 
-    Object originalSpiCache = ReflectionTestUtils.getField(SPI.class, "cachedSpiInstanceMap");
-    var testSpiCache = new ConcurrentSkipListMap<String, List<?>>();
-    testSpiCache.put(CurrentUserSupplier.class.getName(), Collections.singletonList((CurrentUserSupplier) () -> "approver-1"));
-    ReflectionTestUtils.setField(SPI.class, "cachedSpiInstanceMap", testSpiCache);
-
     Map<String, FlowProcessInfo> result;
-    try {
-      result = service.getProcessInfoByApprovalUrls(
-          "flow-a",
-          Collections.singletonList("/demo/customer/1/approval")).get();
-    } finally {
-      ReflectionTestUtils.setField(SPI.class, "cachedSpiInstanceMap", originalSpiCache);
+    try (var discovery = org.mockito.Mockito.mockStatic(SPI.class, org.mockito.Mockito.withSettings()
+        .defaultAnswer(org.mockito.Mockito.CALLS_REAL_METHODS).mockMaker(org.mockito.MockMakers.INLINE))) {
+      discovery.when(() -> SPI.getCachedServiceStream(CurrentUserSupplier.class))
+          .thenAnswer(ignored -> java.util.stream.Stream.of((CurrentUserSupplier) () -> "approver-1"));
+      result = directRead
+          ? Map.of("/demo/customer/1/approval", service.getProcessInfo("instance-1").get())
+          : service.getProcessInfoByApprovalUrls(
+              "flow-a", Collections.singletonList("/demo/customer/1/approval")).get();
     }
 
     FlowProcessInfo info = result.get("/demo/customer/1/approval");
@@ -523,6 +523,9 @@ public class FlowableFlowInstanceServiceTest {
     assertEquals(LocalDateTime.of(2026, 3, 18, 9, 5), info.getTasks().get(0).getStartTime());
     assertEquals(Boolean.TRUE, info.isProcessable());
     assertEquals("task-1", info.getProcessableTaskId());
+    assertTrue(info.isDiagramAvailable());
+    assertTrue(info.isTimelineAvailable());
+    assertTrue(info.isCancellable());
   }
 
   @Test

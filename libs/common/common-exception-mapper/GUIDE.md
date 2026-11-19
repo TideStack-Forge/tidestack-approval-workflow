@@ -4,12 +4,14 @@
 
 ## 模块概述
 
+数据模型异常映射现位于 `core/ouroboros-data/ouroboros-data-platform-adapter`，并在那里注册正式 SPI；`common-exception-mapper` 只保留通用 mapper 合同，不再承载 data 实现。
+
 `common-exception-mapper` 提供了一个可扩展的异常映射机制，通过 SPI 模式将不同来源的异常转换为 Ouroboros 标准异常。
 
 **核心功能:**
 - 统一异常转换接口
 - 基于 SPI 的可扩展映射器注册
-- 内置 DataModel 异常映射器
+- 数据异常适配由 data-platform-adapter 提供
 
 ## 核心接口
 
@@ -34,11 +36,11 @@ static OuroborosException toOuroborosException(Throwable throwable, Supplier<Our
 static OuroborosException toOuroborosException(Throwable throwable, Function<Throwable, OuroborosException> defaultMapper);
 ```
 
-## 内置映射器
+## 数据适配模块提供的映射器
 
 ### DataModelExceptionMapper
 
-路径: `com.ouroboros.exception.mapper.DataModelExceptionMapper`
+路径: `com.ouroboros.data.runtime.adapter.DataModelExceptionMapper`（制品 `ouroboros-data-platform-adapter`）
 
 将数据模型层异常转换为 Ouroboros 异常。
 
@@ -174,4 +176,5 @@ public class MyExceptionMapper implements OuroborosExceptionMapper {
 
 **传递依赖:**
 - `common-exception`: Ouroboros 异常体系
-- `ouroboros-data-core`: 数据模型核心(DataModelException)
+
+使用数据映射时，由平台装配 `ouroboros-data-platform-adapter`；通用 mapper 模块不传递引入 data。

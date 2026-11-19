@@ -1,0 +1,44 @@
+{
+  "name": "单行文本",
+  "label": "单行文本",
+  "order": 10,
+  "dataType": {
+    "type": "String",
+    "size": "${size}"
+  },
+  "ui": {
+    "input": {
+      "type": "input-text",
+      "maxLength": "${size}"
+    },
+    "display": {
+      "type": "static-text"
+    }
+  },
+  "validations": {
+    "matchRegexp": "${regexp}"
+  },
+  "validationErrors": {
+    "matchRegexp": "${regexpMsg}"
+  },
+  "paramsUiSchema": [
+    {
+      "type": "input-number",
+      "name": "size",
+      "label": "长度",
+      "value": 100
+    },
+    {
+      "type": "input-text",
+      "name": "regexp",
+      "label": "正则表达式",
+      "value": ".*"
+    },
+    {
+      "type": "input-text",
+      "name": "regexpMsg",
+      "label": "自定义校验信息",
+      "value": ""
+    }
+  ]
+}

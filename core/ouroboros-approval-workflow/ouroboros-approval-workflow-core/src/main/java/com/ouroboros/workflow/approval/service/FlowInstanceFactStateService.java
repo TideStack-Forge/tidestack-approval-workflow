@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ouroboros.common.service.SimpleModelServiceImpl;
+import com.ouroboros.data.service.SimpleModelServiceImpl;
 import com.ouroboros.data.exception.UniqueConstraintViolationException;
 import com.ouroboros.data.dsl.statement.QueryStatement;
 import com.ouroboros.data.dsl.SExpression;

@@ -15,6 +15,19 @@ public class FlowProcessInfo {
   List<TaskInfo> tasks = Collections.emptyList();
   Boolean processable = false;
   String processableTaskId;
+  String externalUrl;
+  boolean diagramAvailable;
+  boolean timelineAvailable;
+  boolean cancellable;
+
+  public String getExternalUrl() { return externalUrl; }
+  public void setExternalUrl(String externalUrl) { this.externalUrl = externalUrl; }
+  public boolean isDiagramAvailable() { return diagramAvailable; }
+  public void setDiagramAvailable(boolean diagramAvailable) { this.diagramAvailable = diagramAvailable; }
+  public boolean isTimelineAvailable() { return timelineAvailable; }
+  public void setTimelineAvailable(boolean timelineAvailable) { this.timelineAvailable = timelineAvailable; }
+  public boolean isCancellable() { return cancellable; }
+  public void setCancellable(boolean cancellable) { this.cancellable = cancellable; }
 
   public String getInstanceId() {
     return instanceId;

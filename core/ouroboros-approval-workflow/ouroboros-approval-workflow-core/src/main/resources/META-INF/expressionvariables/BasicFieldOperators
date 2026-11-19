@@ -1,0 +1,16 @@
+单选:     select_equals, select_not_equals
+数据字典: select_equals, select_not_equals
+
+货币:     equal, not_equal, less, less_or_equal, greater, greater_or_equal, between, not_between, is_empty, is_not_empty
+整数数字: equal, not_equal, less, less_or_equal, greater, greater_or_equal, between, not_between, is_empty, is_not_empty
+定点数字: equal, not_equal, less, less_or_equal, greater, greater_or_equal, between, not_between, is_empty, is_not_empty
+浮点数字: equal, not_equal, less, less_or_equal, greater, greater_or_equal, between, not_between, is_empty, is_not_empty
+日期:     equal, not_equal, less, less_or_equal, greater, greater_or_equal, between, not_between, is_empty, is_not_empty
+日期时间: equal, not_equal, less, less_or_equal, greater, greater_or_equal, between, not_between, is_empty, is_not_empty
+
+网址:     equal, not_equal, like, not_like, starts_with, ends_with, is_empty, is_not_empty
+电子邮箱: equal, not_equal, like, not_like, starts_with, ends_with, is_empty, is_not_empty
+电话号码: equal, not_equal, like, not_like, starts_with, ends_with, is_empty, is_not_empty
+邮政编码: equal, not_equal, like, not_like, starts_with, ends_with, is_empty, is_not_empty
+单行文本: equal, not_equal, like, not_like, starts_with, ends_with, is_empty, is_not_empty
+多行文本: equal, not_equal, like, not_like, starts_with, ends_with, is_empty, is_not_empty

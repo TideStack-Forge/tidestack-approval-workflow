@@ -1,0 +1,38 @@
+{
+  "name": "雪花主键",
+  "label": "雪花主键",
+  "order": 10,
+  "isPrimaryKeyType": true,
+  "primaryKeyGenerator": "snowflake",
+  "dataType": {
+    "type": "${valueType}",
+    "size": 19
+  },
+  "ui": {
+    "input": {
+      "type": "input-text"
+    },
+    "display": {
+      "type": "static-text"
+    }
+  },
+  "validations": {},
+  "paramsUiSchema": [
+    {
+      "type": "select",
+      "name": "valueType",
+      "label": "值类型",
+      "value": "Snowflake",
+      "options": [
+        {
+          "label": "Snowflake",
+          "value": "Snowflake"
+        },
+        {
+          "label": "字符串",
+          "value": "String"
+        }
+      ]
+    }
+  ]
+}

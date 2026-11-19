@@ -1,0 +1,28 @@
+{
+  "name": "日期",
+  "label": "日期",
+  "order": 40,
+  "dataType": {
+    "type": "Date"
+  },
+  "ui": {
+    "input": {
+      "type": "input-date",
+      "format": "YYYY-MM-DD",
+      "inputFormat": "${format}"
+    },
+    "display": {
+      "type": "static-date",
+      "format": "${format}"
+    }
+  },
+  "validations": {},
+  "paramsUiSchema": [
+    {
+      "type": "input-text",
+      "name": "format",
+      "label": "格式",
+      "value": "YYYY-MM-DD"
+    }
+  ]
+}

@@ -224,6 +224,11 @@ public class FlowableFlowInstanceService implements BuiltInFlowInstanceService {
   }
 
   @Override
+  public Try<FlowProcessInfo> getProcessInfo(String instanceId) {
+    return queryService.getProcessInfo(instanceId);
+  }
+
+  @Override
   public FlowDefinition getInstanceFlowDefinition(String instanceId) {
     return queryService.getInstanceFlowDefinition(instanceId);
   }

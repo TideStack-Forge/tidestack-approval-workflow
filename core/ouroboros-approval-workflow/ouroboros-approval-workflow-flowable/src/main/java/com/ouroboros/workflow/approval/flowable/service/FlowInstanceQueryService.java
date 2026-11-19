@@ -44,9 +44,9 @@ import com.ouroboros.util.Converter;
 import com.ouroboros.util.Dates;
 import com.ouroboros.workflow.approval.CurrentUserSupplier;
 import com.ouroboros.workflow.approval.FlowFormService;
+import com.ouroboros.workflow.approval.FlowInitialFormResolver;
 import com.ouroboros.workflow.approval.definition.FlowDefinition;
 import com.ouroboros.workflow.approval.definition.FlowNode;
-import com.ouroboros.workflow.approval.definition.NodeFormFieldPermission;
 import com.ouroboros.workflow.approval.definition.codec.FlowDefinitionV2Normalizer;
 import com.ouroboros.workflow.approval.definition.graph.StructuredFlowDefinition;
 import com.ouroboros.workflow.approval.definition.nodes.BuiltInFlowNodeTypes;
@@ -156,15 +156,7 @@ public class FlowInstanceQueryService {
       return Try.failure(new BusinessException("审批流定义不存在"));
     }
 
-    var formType = StringUtils.defaultIfBlank(flowDefinition.getFormType(), "default");
-    var formKey = flowDefinition.getFormKey();
-    if (StringUtils.isBlank(formKey)) {
-      return Try.failure(new BusinessException("流程未绑定表单"));
-    }
-
-    return getFlowFormService(formType)
-        .map(service -> service.getInitialFormSchema(formKey, getInitialPermissions(flowDefinition, formType)))
-        .orElseGet(() -> Try.failure(new BusinessException("未找到对应的表单服务")));
+    return new FlowInitialFormResolver(flowFormServices).resolve(flowDefinition);
   }
 
   public List<FlowInstanceStatistic> getStatistic(String keyword, String status, Integer offset, Integer limit) {
@@ -307,6 +299,12 @@ public class FlowInstanceQueryService {
         .max(Comparator.comparing(HistoricProcessInstance::getStartTime, Comparator.nullsFirst(Date::compareTo)));
   }
 
+  public Try<FlowProcessInfo> getProcessInfo(String instanceId) {
+    return getHistoricInstance(instanceId).flatMap(instance -> instance == null
+        ? Try.failure(new BusinessException("流程实例不存在: " + instanceId))
+        : Try.of(() -> mapProcessInfo(instance)));
+  }
+
   private FlowProcessInfo mapProcessInfo(HistoricProcessInstance instance) {
     var runtimeStatuses = resolveRuntimeStatuses(Collections.singletonList(instance), null);
     var info = new FlowProcessInfo();
@@ -316,6 +314,9 @@ public class FlowInstanceQueryService {
     info.setStartTime(Optional.ofNullable(instance.getStartTime()).map(Dates::toLocalDateTime).orElse(null));
     info.setEndTime(Optional.ofNullable(instance.getEndTime()).map(Dates::toLocalDateTime).orElse(null));
     info.setStatus(resolveHistoricStatus(instance, null, runtimeStatuses));
+    info.setDiagramAvailable(true);
+    info.setTimelineAvailable(true);
+    info.setCancellable("running".equals(info.getStatus()) || "suspended".equals(info.getStatus()));
     info.setOutcome(getProcessStringVariable(instance.getId(), Constants.Variable.PROCESS_OUTCOME));
     var tasks = mapActiveProcessTasks(instance);
     info.setTasks(tasks);
@@ -1044,6 +1045,7 @@ public class FlowInstanceQueryService {
     detail.setStartTime(Optional.ofNullable(instance.getStartTime()).map(Dates::toLocalDateTime).orElse(null));
     detail.setEndTime(Optional.ofNullable(instance.getEndTime()).map(Dates::toLocalDateTime).orElse(null));
     detail.setStatus(status);
+    detail.setCancellable("running".equals(status) || "suspended".equals(status));
     detail.setOutcome(outcome);
     detail.setTaskId(Optional.ofNullable(latestTask).map(HistoricTaskInstance::getId).orElse(null));
     detail.setTaskName(Optional.ofNullable(latestTask).map(HistoricTaskInstance::getName).orElse(null));
@@ -1128,23 +1130,6 @@ public class FlowInstanceQueryService {
     return Try.of(() -> historyService.createHistoricProcessInstanceQuery()
         .processInstanceId(instanceId)
         .singleResult());
-  }
-
-  private Optional<FlowFormService> getFlowFormService(String formType) {
-    return flowFormServices.stream()
-        .filter(Objects::nonNull)
-        .filter(service -> service.getType().equalsIgnoreCase(formType))
-        .findFirst();
-  }
-
-  private List<NodeFormFieldPermission> getInitialPermissions(StructuredFlowDefinition flowDefinition, String formType) {
-    if (!StringUtils.equalsIgnoreCase(StringUtils.defaultIfBlank(formType, "default"), "default")) {
-      return Collections.emptyList();
-    }
-    return Optional.ofNullable(flowDefinition)
-        .flatMap(StructuredFlowDefinition::getStartFlowNode)
-        .map(FlowNode::getPermission)
-        .orElseGet(Collections::emptyList);
   }
 
   private static class TimelineItem {

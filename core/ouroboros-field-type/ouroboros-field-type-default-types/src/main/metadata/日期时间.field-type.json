@@ -1,0 +1,26 @@
+{
+  "name": "日期时间",
+  "label": "日期时间",
+  "order": 50,
+  "dataType": {
+    "type": "DateTime"
+  },
+  "ui": {
+    "input": {
+      "type": "input-datetime"
+    },
+    "display": {
+      "type": "static-datetime",
+      "displayFormat": "${format}"
+    }
+  },
+  "validations": {},
+  "paramsUiSchema": [
+    {
+      "type": "input-text",
+      "name": "format",
+      "label": "格式",
+      "value": "YYYY-MM-DD HH:mm:ss"
+    }
+  ]
+}

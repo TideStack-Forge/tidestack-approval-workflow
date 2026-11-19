@@ -1,0 +1,24 @@
+{
+  "name": "自增主键",
+  "label": "自增主键",
+  "order": 20,
+  "isPrimaryKeyType": true,
+  "primaryKeyGenerator": "autoIncrement",
+  "dataType": {
+    "type": "Long",
+    "isAutoIncrement": true
+  },
+  "ui": {
+    "input": {
+      "type": "input-text",
+      "maxLength": "${size}"
+    },
+    "display": {
+      "type": "static-text"
+    }
+  },
+  "validations": {
+    "matchRegexp": "${regexp}"
+  },
+  "paramsUiSchema": []
+}

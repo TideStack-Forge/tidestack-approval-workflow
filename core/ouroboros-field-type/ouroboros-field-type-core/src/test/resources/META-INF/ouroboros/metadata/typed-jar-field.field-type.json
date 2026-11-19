@@ -1,0 +1,10 @@
+{
+  "name": "typedJarField",
+  "label": "Typed Jar Field",
+  "paramsUiSchema": [
+    {
+      "name": "size",
+      "value": 24
+    }
+  ]
+}

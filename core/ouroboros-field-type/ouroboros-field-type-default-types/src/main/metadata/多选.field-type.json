@@ -1,0 +1,51 @@
+{
+  "name": "多选",
+  "label": "多选",
+  "order": 90,
+  "dataType": {
+    "type": "String",
+    "size": "${size}"
+  },
+  "ui": {
+    "input": {
+      "type": "checkboxes",
+      "options": "${options}"
+    },
+    "display": {
+      "type": "static-checkboxes",
+      "options": "${options}"
+    }
+  },
+  "validations": {},
+  "paramsUiSchema": [
+    {
+      "type": "input-number",
+      "name": "size",
+      "label": "长度",
+      "value": 200
+    },
+    {
+      "type": "combo",
+      "name": "options",
+      "label": "选项",
+      "multiple": true,
+      "strictMode": false,
+      "items": [
+        {
+          "type": "input-text",
+          "name": "value",
+          "placeholder": "值",
+          "required": true,
+          "unique": true
+        },
+        {
+          "type": "input-text",
+          "name": "label",
+          "placeholder": "显示文本",
+          "required": true,
+          "unique": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "name": "整数数字",
+  "label": "整数数字",
+  "order": 20,
+  "dataType": {
+    "type": "Integer"
+  },
+  "ui": {
+    "input": {
+      "type": "input-number",
+      "min": "${min}",
+      "max": "${max}"
+    },
+    "display": {
+      "type": "static-number"
+    }
+  },
+  "validations": {},
+  "paramsUiSchema": [
+    {
+      "type": "input-number",
+      "name": "min",
+      "label": "最小值"
+    },
+    {
+      "type": "input-number",
+      "name": "max",
+      "label": "最大值"
+    }
+  ]
+}

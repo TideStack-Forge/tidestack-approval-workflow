@@ -1,0 +1,48 @@
+{
+  "name": "定点数字",
+  "label": "定点数字",
+  "order": 35,
+  "dataType": {
+    "type": "Decimal",
+    "decimalDigits": "${precision}",
+    "size": "${size}"
+  },
+  "ui": {
+    "input": {
+      "type": "input-number",
+      "min": "${min}",
+      "max": "${max}",
+      "precision": "${precision}"
+    },
+    "display": {
+      "type": "static-number",
+      "precision": "${precision}"
+    }
+  },
+  "validations": {},
+  "paramsUiSchema": [
+    {
+      "type": "input-number",
+      "name": "min",
+      "label": "最小值"
+    },
+    {
+      "type": "input-number",
+      "name": "max",
+      "label": "最大值"
+    },
+    {
+      "type": "input-number",
+      "name": "size",
+      "label": "总长度",
+      "description": "包括整数部分和小数部分的总位数",
+      "value": 10
+    },
+    {
+      "type": "input-number",
+      "name": "precision",
+      "label": "小数位数",
+      "value": 2
+    }
+  ]
+}

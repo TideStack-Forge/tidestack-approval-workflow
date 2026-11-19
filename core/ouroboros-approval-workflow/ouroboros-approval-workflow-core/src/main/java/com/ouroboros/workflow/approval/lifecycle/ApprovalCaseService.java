@@ -14,7 +14,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ouroboros.common.service.SimpleModelServiceImpl;
+import com.ouroboros.data.service.SimpleModelServiceImpl;
 import com.ouroboros.data.exception.UniqueConstraintViolationException;
 import com.ouroboros.data.dsl.Operators;
 import com.ouroboros.data.dsl.SExpression;

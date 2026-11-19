@@ -1,0 +1,38 @@
+{
+  "name": "浮点数字",
+  "label": "浮点数字",
+  "order": 30,
+  "dataType": {
+    "type": "Double"
+  },
+  "ui": {
+    "input": {
+      "type": "input-number",
+      "min": "${min}",
+      "max": "${max}",
+      "precision": "${precision}"
+    },
+    "display": {
+      "type": "static-number"
+    }
+  },
+  "validations": {},
+  "paramsUiSchema": [
+    {
+      "type": "input-number",
+      "name": "min",
+      "label": "最小值"
+    },
+    {
+      "type": "input-number",
+      "name": "max",
+      "label": "最大值"
+    },
+    {
+      "type": "input-number",
+      "name": "precision",
+      "label": "小数位数",
+      "value": 3
+    }
+  ]
+}

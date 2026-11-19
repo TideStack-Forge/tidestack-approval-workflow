@@ -1,6 +1,7 @@
 package com.ouroboros.workflow.approval.flowable.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.eq;
@@ -28,6 +29,7 @@ import io.vavr.control.Try;
 import com.ouroboros.uischema.schema.SchemaNode;
 import com.ouroboros.util.Json;
 import com.ouroboros.workflow.approval.FlowFormService;
+import com.ouroboros.workflow.approval.FlowFormServiceUnavailableException;
 import com.ouroboros.workflow.approval.FlowTaskAction;
 import com.ouroboros.workflow.approval.definition.FlowNode;
 import com.ouroboros.workflow.approval.definition.NodeFormFieldPermission;
@@ -36,17 +38,21 @@ import com.ouroboros.workflow.approval.definition.nodes.HandleNode;
 import com.ouroboros.workflow.approval.definition.nodes.SingleApprovalNode;
 import com.ouroboros.workflow.approval.flowable.transpiler.Constants;
 import com.ouroboros.workflow.approval.flowable.util.BpmnUtil;
+import com.ouroboros.workflow.approval.event.TaskEventDispatcher;
 
 class FlowableFlowTaskServiceFormModelTest {
+  private abstract static class TestTaskAction implements FlowTaskAction<Task> {
+  }
+
   @Test
   void doActionSubmitsTaskFormThroughMatchingFlowFormService() {
     TaskService taskService = mock(TaskService.class);
     RepositoryService repositoryService = mock(RepositoryService.class);
     FlowFormService flowFormService = mock(FlowFormService.class);
-    @SuppressWarnings("unchecked")
-    FlowTaskAction<Task> action = mock(FlowTaskAction.class);
+    TestTaskAction action = mock(TestTaskAction.class);
     FlowableFlowTaskService service = new FlowableFlowTaskService(taskService, Collections.singletonList(action));
     service.repositoryService = repositoryService;
+    service.taskEventDispatcher = new TaskEventDispatcher();
     setFieldIfPresent(service, "flowFormServices", Collections.singletonList(flowFormService));
 
     TaskQuery taskQuery = mock(TaskQuery.class);
@@ -104,6 +110,7 @@ class FlowableFlowTaskServiceFormModelTest {
     FlowFormService flowFormService = mock(FlowFormService.class);
     FlowableFlowTaskService service = new FlowableFlowTaskService(taskService, Collections.emptyList());
     service.repositoryService = repositoryService;
+    service.taskEventDispatcher = new TaskEventDispatcher();
     setFieldIfPresent(service, "flowFormServices", Collections.singletonList(flowFormService));
 
     TaskQuery taskQuery = mock(TaskQuery.class);
@@ -146,6 +153,7 @@ class FlowableFlowTaskServiceFormModelTest {
     FlowFormService flowFormService = mock(FlowFormService.class);
     FlowableFlowTaskService service = new FlowableFlowTaskService(taskService, Collections.emptyList());
     service.repositoryService = repositoryService;
+    service.taskEventDispatcher = new TaskEventDispatcher();
     setFieldIfPresent(service, "flowFormServices", Collections.singletonList(flowFormService));
 
     TaskQuery taskQuery = mock(TaskQuery.class);
@@ -194,6 +202,7 @@ class FlowableFlowTaskServiceFormModelTest {
     FlowFormService flowFormService = mock(FlowFormService.class);
     FlowableFlowTaskService service = new FlowableFlowTaskService(taskService, Collections.emptyList());
     service.repositoryService = repositoryService;
+    service.taskEventDispatcher = new TaskEventDispatcher();
     setFieldIfPresent(service, "flowFormServices", Collections.singletonList(flowFormService));
 
     TaskQuery taskQuery = mock(TaskQuery.class);
@@ -236,6 +245,7 @@ class FlowableFlowTaskServiceFormModelTest {
     FlowFormService flowFormService = mock(FlowFormService.class);
     FlowableFlowTaskService service = new FlowableFlowTaskService(taskService, Collections.emptyList());
     service.repositoryService = repositoryService;
+    service.taskEventDispatcher = new TaskEventDispatcher();
     setFieldIfPresent(service, "flowFormServices", Collections.singletonList(flowFormService));
 
     TaskQuery taskQuery = mock(TaskQuery.class);
@@ -311,6 +321,7 @@ class FlowableFlowTaskServiceFormModelTest {
     RepositoryService repositoryService = mock(RepositoryService.class);
     FlowableFlowTaskService service = new FlowableFlowTaskService(taskService, Collections.emptyList());
     service.repositoryService = repositoryService;
+    service.taskEventDispatcher = new TaskEventDispatcher();
     setFieldIfPresent(service, "flowFormServices", Collections.emptyList());
 
     TaskQuery taskQuery = mock(TaskQuery.class);
@@ -330,7 +341,8 @@ class FlowableFlowTaskServiceFormModelTest {
     var result = service.getTaskForm("task-1");
 
     assertTrue(result.isFailure());
-    assertEquals("未找到对应的表单服务", result.getCause().getMessage());
+    assertInstanceOf(FlowFormServiceUnavailableException.class, result.getCause());
+    assertEquals("当前表单未接入通用审批页面，请通过业务页面操作（default）", result.getCause().getMessage());
   }
 
   @Test
@@ -340,6 +352,7 @@ class FlowableFlowTaskServiceFormModelTest {
     FlowFormService flowFormService = mock(FlowFormService.class);
     FlowableFlowTaskService service = new FlowableFlowTaskService(taskService, Collections.emptyList());
     service.repositoryService = repositoryService;
+    service.taskEventDispatcher = new TaskEventDispatcher();
     setFieldIfPresent(service, "flowFormServices", Collections.singletonList(flowFormService));
 
     TaskQuery taskQuery = mock(TaskQuery.class);

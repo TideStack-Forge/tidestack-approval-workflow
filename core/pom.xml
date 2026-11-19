@@ -11,6 +11,7 @@
     <modules>
         <module>ouroboros-data</module>
         <module>ouroboros-approval-workflow</module>
+        <module>ouroboros-field-type</module>
         <module>ouroboros-ui-model</module>
     </modules>
 </project>

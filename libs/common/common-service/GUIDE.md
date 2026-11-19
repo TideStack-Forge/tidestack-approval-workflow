@@ -1,13 +1,17 @@
 # Common Service - 服务层基类指南
 
-本文档描述了 `common-service` 模块中的服务层基类，用于简化基于 Typed Data Model 的 CRUD 服务开发。
+本文档描述了 `common-service` 合同与 data 模块中的服务层基类，用于简化基于 Typed Data Model 的 CRUD 服务开发。
 
 ## 模块概述
 
-`common-service` 提供了一套标准的服务层基类，封装了常见的 CRUD 操作和查询功能。支持普通删除和软删除两种模式。
+`common-service` 保留 `ModelService`、软删除合同及 outbox 规则；Typed Data 服务层实现现位于 `core/ouroboros-data/ouroboros-data-typed-core`。上层模块应从该模块引入服务基类，而不是继续把数据实现放回 libs。
+
+`ouroboros-data-typed-core` 提供了一套标准的服务层基类，封装了常见的 CRUD 操作和查询功能。支持普通删除和软删除两种模式。
 
 **核心依赖**:
-- `ouroboros-data-typed-runtime`: Typed Data Model 运行时
+- `ouroboros-data-typed-core`: Typed Data Model 合同与 CRUD 实现（`com.ouroboros.data.service`）
+- `common-service`: 与引擎无关的服务合同
+- 运行时由正式平台装配 typed runtime 和 data platform adapter
 - `common-exception-mapper`: 异常映射
 
 ## 核心接口和类

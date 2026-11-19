@@ -28,9 +28,5 @@
             <groupId>com.ouroboros</groupId>
             <artifactId>common-exception</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.ouroboros</groupId>
-            <artifactId>ouroboros-data-core</artifactId>
-        </dependency>
     </dependencies>
 </project>

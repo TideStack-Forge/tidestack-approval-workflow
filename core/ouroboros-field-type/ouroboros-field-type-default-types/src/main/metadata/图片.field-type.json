@@ -1,0 +1,26 @@
+{
+  "name": "图片",
+  "label": "图片",
+  "order": 131,
+  "dataType": {
+    "type": "String",
+    "size": "${size}"
+  },
+  "ui": {
+    "input": {
+      "type": "input-image",
+      "receiver": "POST:/api/upload/file"
+    },
+    "display": {
+      "type": "static-image"
+    }
+  },
+  "paramsUiSchema": [
+    {
+      "type": "input-number",
+      "name": "size",
+      "label": "字段大小",
+      "value": 200
+    }
+  ]
+}

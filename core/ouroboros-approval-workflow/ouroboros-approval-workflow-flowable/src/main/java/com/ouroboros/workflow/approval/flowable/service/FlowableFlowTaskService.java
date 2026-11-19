@@ -258,7 +258,7 @@ public class FlowableFlowTaskService
     var actions = getTaskActions(task);
     var flowFormServiceOptional = getFlowFormService(formType);
     if (!flowFormServiceOptional.isPresent()) {
-      return Try.failure(new PlatformException("未找到对应的表单服务"));
+      return Try.failure(new com.ouroboros.workflow.approval.FlowFormServiceUnavailableException(formType));
     }
 
     var schemaTry = flowFormServiceOptional.get()
@@ -620,7 +620,7 @@ public class FlowableFlowTaskService
 
     var flowFormServiceOptional = getFlowFormService(getTaskFormType(task.getId()));
     if (!flowFormServiceOptional.isPresent()) {
-      return Try.failure(new PlatformException("未找到对应的表单服务"));
+      return Try.failure(new com.ouroboros.workflow.approval.FlowFormServiceUnavailableException(getTaskFormType(task.getId())));
     }
 
     return flowFormServiceOptional.get().submitTaskForm(

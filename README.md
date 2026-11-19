@@ -4,7 +4,7 @@
 
 ## 模块与依赖
 
-审批模块位于 `core/ouroboros-approval-workflow`，包含 core、flowable 和 engine-testkit。为保持原始实现与编译依赖，本仓同时携带清单声明的 Data、UI Schema、公共库支持模块及原有父 POM/BOM 层级，聚合模块限定为导出集合。
+审批模块位于 `core/ouroboros-approval-workflow`，包含 core、flowable 和 engine-testkit。为保持原始实现与编译依赖，本仓同时携带清单声明的 Data、字段类型、UI Schema、公共库支持模块及原有父 POM/BOM 层级，聚合模块限定为导出集合。
 
 候选人解析、任务动作、事件与转译沿用原有 SPI。平台 manage、web、runtime、dev 和表单集成仍由总仓维护，未包含在本次引擎分发中。
 

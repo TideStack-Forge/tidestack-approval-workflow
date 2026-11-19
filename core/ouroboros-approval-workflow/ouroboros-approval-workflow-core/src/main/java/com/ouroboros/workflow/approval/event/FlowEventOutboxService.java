@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.ouroboros.common.service.SimpleModelServiceImpl;
+import com.ouroboros.data.service.SimpleModelServiceImpl;
 import com.ouroboros.common.service.outbox.OutboxBackoff;
 import com.ouroboros.common.service.outbox.OutboxLease;
 import com.ouroboros.exception.BusinessException;

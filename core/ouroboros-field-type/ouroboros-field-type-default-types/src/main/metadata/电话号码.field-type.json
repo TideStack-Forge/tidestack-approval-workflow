@@ -1,0 +1,28 @@
+{
+  "name": "电话号码",
+  "label": "电话号码",
+  "order": 110,
+  "dataType": {
+    "type": "String",
+    "size": "${size}"
+  },
+  "ui": {
+    "input": {
+      "type": "input-text"
+    },
+    "display": {
+      "type": "static-text"
+    }
+  },
+  "validations": {
+    "isTelNumber": true
+  },
+  "paramsUiSchema": [
+    {
+      "type": "input-number",
+      "name": "size",
+      "label": "长度",
+      "value": 20
+    }
+  ]
+}
