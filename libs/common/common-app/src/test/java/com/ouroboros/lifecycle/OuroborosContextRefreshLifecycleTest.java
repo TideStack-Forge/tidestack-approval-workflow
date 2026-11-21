@@ -157,6 +157,77 @@ class OuroborosContextRefreshLifecycleTest {
     assertSame(fallbackFailure, thrown.getSuppressed()[0]);
   }
 
+  @Test
+  void conditionalPublicationRejectsStaleContextAndNeverReplaysEventsOrPoisonsContext() {
+    var events = new ArrayList<OuroborosEvent>();
+    OuroborosContextRefreshLifecycle.publish(this, events::add);
+    long epoch = OuroborosContextRefreshLifecycle.currentEpoch();
+    var value = new java.util.concurrent.atomic.AtomicReference<>("old");
+    assertEquals(OuroborosContextRefreshLifecycle.PublicationResult.PUBLISHED,
+        OuroborosContextRefreshLifecycle.publishIfCurrent(epoch, java.time.Duration.ZERO,
+            () -> true, () -> value.set("new")));
+    assertEquals(12, events.size());
+    assertEquals("new", value.get());
+    assertEquals(OuroborosContextRefreshLifecycle.PublicationResult.STALE,
+        OuroborosContextRefreshLifecycle.publishIfCurrent(epoch, java.time.Duration.ZERO,
+            () -> false, () -> value.set("wrong")));
+    assertThrows(IllegalArgumentException.class, () -> OuroborosContextRefreshLifecycle.publishIfCurrent(
+        epoch, java.time.Duration.ZERO, () -> true, () -> { throw new IllegalArgumentException("component"); }));
+    assertEquals("new", OuroborosContextRefreshLifecycle.withStableContext(value::get));
+    OuroborosContextRefreshLifecycle.publish(this, event -> { });
+    assertEquals(OuroborosContextRefreshLifecycle.PublicationResult.STALE,
+        OuroborosContextRefreshLifecycle.publishIfCurrent(epoch, java.time.Duration.ZERO,
+            () -> true, () -> value.set("wrong")));
+    assertEquals("new", value.get());
+  }
+
+  @Test
+  void conditionalPublicationTimesOutWhileBusinessHoldsTheStableContext() throws Exception {
+    OuroborosContextRefreshLifecycle.publish(this, event -> { });
+    long epoch = OuroborosContextRefreshLifecycle.currentEpoch();
+    var entered = new java.util.concurrent.CountDownLatch(1);
+    var release = new java.util.concurrent.CountDownLatch(1);
+    try (var executor = java.util.concurrent.Executors.newSingleThreadExecutor()) {
+      var reader = executor.submit(() -> OuroborosContextRefreshLifecycle.withStableContext(() -> {
+        entered.countDown();
+        try {
+          assertTrue(release.await(3, java.util.concurrent.TimeUnit.SECONDS));
+        } catch (InterruptedException failure) {
+          Thread.currentThread().interrupt();
+          throw new IllegalStateException(failure);
+        }
+        return "old";
+      }));
+      assertTrue(entered.await(2, java.util.concurrent.TimeUnit.SECONDS));
+      try {
+        assertEquals(OuroborosContextRefreshLifecycle.PublicationResult.TIMED_OUT,
+            OuroborosContextRefreshLifecycle.publishIfCurrent(epoch, java.time.Duration.ofMillis(50),
+                () -> true, () -> { throw new AssertionError("must not switch"); }));
+      } finally {
+        release.countDown();
+      }
+      assertEquals("old", reader.get(2, java.util.concurrent.TimeUnit.SECONDS));
+    }
+  }
+
+  @Test
+  void componentCannotUpgradeReadLockAndCannotRecoverFailedFullContext() {
+    OuroborosContextRefreshLifecycle.publish(this, event -> { });
+    long epoch = OuroborosContextRefreshLifecycle.currentEpoch();
+    assertThrows(IllegalStateException.class, () -> OuroborosContextRefreshLifecycle.withStableContext(() ->
+        OuroborosContextRefreshLifecycle.publishIfCurrent(epoch, java.time.Duration.ZERO, () -> true, () -> { })));
+    try {
+      assertThrows(IllegalStateException.class, () -> OuroborosContextRefreshLifecycle.publish(this, event -> {
+        throw new IllegalStateException("full context failed");
+      }));
+      assertEquals(OuroborosContextRefreshLifecycle.PublicationResult.UNAVAILABLE,
+          OuroborosContextRefreshLifecycle.publishIfCurrent(epoch, java.time.Duration.ZERO, () -> true,
+              () -> { throw new AssertionError("must not recover"); }));
+    } finally {
+      OuroborosContextRefreshLifecycle.publish(this, event -> { });
+    }
+  }
+
   private static void assertProgress(OuroborosEvent event, String phase, String message) {
     assertSame(OuroborosBootstrapProgressEvent.class, event.getClass());
     OuroborosBootstrapProgressEvent progressEvent = (OuroborosBootstrapProgressEvent) event;

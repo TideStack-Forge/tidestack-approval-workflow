@@ -659,6 +659,16 @@
             </dependency>
             <dependency>
                 <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-logicflow-runtime-manage</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-logicflow-editor-assets</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
                 <artifactId>ouroboros-logicflow-authoring</artifactId>
                 <version>${ouroboros.version}</version>
             </dependency>
@@ -899,6 +909,101 @@
             </dependency>
             <dependency>
                 <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-enterprise-rpc-runtime</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-enterprise-rpc-dingtalk</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-enterprise-rpc-wecom</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-enterprise-rpc-feishu</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-enterprise-rpc-dingtalk-contact</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-enterprise-rpc-wecom-contact</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-enterprise-rpc-feishu-contact</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-enterprise-connector-core</artifactId>
+                <version>${ouroboros.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-enterprise-connector-manage</artifactId>
+                <version>${ouroboros.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-enterprise-connector-runtime</artifactId>
+                <version>${ouroboros.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-organization-structure-enterprise-dingtalk</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-organization-structure-enterprise-wecom</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-organization-structure-enterprise-feishu</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-organization-structure-enterprise-runtime</artifactId>
+                <version>${ouroboros.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-enterprise-connector-dingtalk</artifactId>
+                <version>${ouroboros.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-enterprise-connector-wecom</artifactId>
+                <version>${ouroboros.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-enterprise-connector-feishu</artifactId>
+                <version>${ouroboros.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-integration-management-core</artifactId>
+                <version>${ouroboros.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-integration-management-runtime</artifactId>
+                <version>${ouroboros.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
                 <artifactId>ouroboros-external-auth-configuration</artifactId>
                 <version>${ouroboros.version}</version>
             </dependency>
@@ -990,6 +1095,36 @@
             <dependency>
                 <groupId>com.ouroboros</groupId>
                 <artifactId>ouroboros-approval-workflow-external-integration-feishu</artifactId>
+                <version>${ouroboros.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-enterprise-rpc-dingtalk-message</artifactId>
+                <version>${ouroboros.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-enterprise-rpc-wecom-message</artifactId>
+                <version>${ouroboros.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-enterprise-rpc-feishu-message</artifactId>
+                <version>${ouroboros.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-notification-channel-enterprise</artifactId>
+                <version>${ouroboros.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-notification-channel-wecom</artifactId>
+                <version>${ouroboros.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ouroboros</groupId>
+                <artifactId>ouroboros-notification-channel-feishu</artifactId>
                 <version>${ouroboros.version}</version>
             </dependency>
             <dependency>
